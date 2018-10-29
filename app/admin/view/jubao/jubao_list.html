@@ -1,0 +1,213 @@
+{extend name="admin@public/base" /}
+{block name="main-content"}
+<div class="page-content">
+
+
+    <div class="row">
+
+        <div class="col-sm-12 infobox-container">
+            <div class="infobox infobox-blue col-xs-12 col-sm-6 col-md-6 col-lg-3"
+                 style="background:royalblue;text-align:center;">
+                <div class="infobox-data" style="text-align:center;">
+                    <span class="infobox-data-number" style="color:white">{$dfp_count}</span>
+                    <div class="infobox-content" style="color:white">待分配举报</div>
+                </div>
+            </div>
+
+            <div class="infobox infobox-white col-xs-12 col-sm-6 col-md-6 col-lg-3"
+                 style="background: orange; text-align:center;margin-left:10px;">
+                <div class="infobox-data" style="text-align:center;">
+                    <span class="infobox-data-number" style="color:white">{$dcl_count}</span>
+                    <div class="infobox-content" style="color:white">待处理举报</div>
+                </div>
+            </div>
+
+            <div class="infobox infobox-blue col-xs-12 col-sm-6 col-md-6 col-lg-3"
+                 style="background: #9ABC32; margin-left:10px;text-align:center;">
+                <div class="infobox-data" style="text-align:center;">
+                    <span class="infobox-data-number" style="color:white">{$ycl_count}</span>
+                    <div class="infobox-content" style="color:white">已处理举报</div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="space-6"></div>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /.row -->
+
+
+    <div class="row maintop">
+
+        <form name="admin_list_sea" class="form-search" id="list-filter" method="post"
+              action="{:url('admin/Jubao/jubao_list')}">
+            <div class=" col-xs-5 col-sm-2  margintop5" style="width:9%;">
+                <a href="{:url('admin/Jubao/exportExcel')}" target="_blank"
+                   style="color:#fff;background:#D15B47;padding:8px;border-radius: 5px;">
+                    导出数据
+                </a>
+            </div>
+
+            <div class="col-xs-12 col-sm-3  margintop5">
+                <select name="catid" class="ajax_change" id="catid">
+                    <option value="">按应用</option>
+                    {foreach name="cats" item="cat"}
+                    <option value="{$cat.catid}" {if condition='$catid eq $cat.catid' }selected="selected" }{/if}>{$cat.catname}</option>
+                    {/foreach}
+                </select>
+                {if condition="$is_other_status eq 0"}
+                <select name="status" class="ajax_change" id="status">
+                    <option value="">按状态</option>
+                    <option value="1" {if condition='$status eq 1' }selected="selected"}{/if}>未分配</option>
+                    <option value="2" {if condition='$status eq 2' }selected="selected"}{/if}>未处理</option>
+                    <option value="3" {if condition='$status eq 3' }selected="selected"}{/if}>已处理</option>
+                    <option value="9" {if condition='$status eq 9' }selected="selected"}{/if}>已隐藏</option>
+                </select>
+                {/if}
+            </div>
+            <div class="col-xs-12 col-sm-2  margintop5">
+                <input name="inner_start_date_start" value="起始日期" id="date-start_date" class="datetime-picker col-sm-6"
+                        type="text">
+                <input name="inner_start_date_end" value="结束日期" id="date-end_date" class="datetime-picker col-sm-6"
+                       type="text">
+
+
+            </div>
+            <div class="col-xs-12 col-sm-3  margintop5">
+
+                <div class="input-group">
+						<span class="input-group-addon">
+							<i class="ace-icon fa fa-check"></i>
+						</span>
+
+                    <input type="text" name="key" id="key" class="form-control" value="{$val}"
+                           placeholder="输入手机号/单号/车号/时间查询"/>
+                    <span class="input-group-btn">
+							<button type="submit" class="btn btn-sm  btn-purple ajax-search-form">
+								<span class="ace-icon fa fa-search icon-on-right bigger-110"></span>
+								搜索
+							</button>
+						</span>
+                </div>
+            </div>
+            <div class="col-xs-4 col-sm-2 margintop5">
+                <div class="input-group-btn">
+                    <a href="{:url('admin/Jubao/jubao_list')}">
+                        <button type="button" class="btn btn-sm  btn-purple ajax-display-all">
+                            <span class="ace-icon fa fa-globe icon-on-right bigger-110"></span>
+                            显示全部
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div>
+                <table class="table table-striped table-bordered table-hover" id="dynamic-table">
+                    <thead>
+                    <tr>
+                        <th class="hidden-xs">单号</th>
+                        <th>应用</th>
+                        <th>流转状态</th>
+                        <th>耗时</th>
+                        <th class="hidden-sm hidden-xs">数据提交人电话</th>
+                        <th class="hidden-sm hidden-xs">提交时间</th>
+                        <th class="hidden-sm hidden-xs">操作</th>
+                        <th class="hidden-sm hidden-xs">节点</th>
+                        <!--<th class="hidden-sm hidden-xs">添加时间</th>-->
+                        <!--<th class="hidden-xs">操作状态</th>-->
+                    </tr>
+                    </thead>
+
+                    <tbody id="ajax-data">
+                    {include file="jubao/ajax_jubao"/}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+</div><!-- /.page-content -->
+{/block}
+
+
+{block name="styles"}
+<!--<style href="/public/datetimepicker/bootstrap-datetimepicker.css"></style>-->
+
+{/block}
+{block name="scripts"}
+<!--<script type="text/javascript" src="/public/datetimepicker/bootstrap-datetimepicker.js"></script>-->
+
+<script type="text/javascript">
+    var date = new Date();
+    $('#date-start_date').datetimepicker({
+        format: 'yyyy-mm-dd hh:ii',
+        autoclose: true,
+        todayBtn: true,
+        language: 'zh-CN',
+        todayHighlight: true,
+        startDate: '-10d',
+    });
+    $('#date-end_date').datetimepicker({
+        format: 'yyyy-mm-dd hh:ii',
+        autoclose: true,
+        todayBtn: true,
+        language: 'zh-CN',
+        todayHighlight: true,
+        startDate: '-1d',
+    });
+    function exportData() {
+        layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+        window.location.href = 'exportExcel';
+
+    }
+    function showDetail(id, onlyLook) {
+
+        var activePageEl = $('.pagination');
+        var page = activePageEl.find('.active').children().html();
+        var status = $('#status').val();
+        var catid = $('#catid').val();
+        var in_dispatch_list = 0;
+
+        layer.open({
+            type: 2,
+
+            title: '举报处理',
+            shade: [0],
+            area: ['900px', '700px'],
+            scrollbar: true,
+            anim: 2,
+            content: ['jubao_handle.html?id=' + id + "&onlyLook=" + onlyLook+ "&page=" + page + "&status=" + status + "&catid=" + catid + "&in_handle_list=" + in_dispatch_list], //iframe的url，no代表不显示滚动条
+
+        });
+    }
+    function dispatchJubao(id) {
+        var activePageEl = $('.pagination');
+        var page = activePageEl.find('.active').children().html();
+        var status = $('#status').val();
+        var catid = $('#catid').val();
+        var in_dispatch_list = 0;
+
+        layer.open({
+            type: 2,
+
+            title: '举报分配',
+            shade: [0],
+            area: ['900px', '700px'],
+            scrollbar: true,
+            anim: 2,
+            content: ['jubao_dispatch.html?id=' + id + "&page=" + page + "&status=" + status + "&catid=" + catid + "&in_dispatch_list=" + in_dispatch_list], //iframe的url，no代表不显示滚动条
+
+        });
+    }
+
+</script>
+{/block}

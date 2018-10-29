@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+
+    <meta name="theme-color" content="#000000">
+    <!--
+      manifest.json provides metadata used when your web app is added to the
+      homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+    <link rel="shortcut icon" href="image/favicon.ico">
+    <script src="js/mui.min.js"></script>
+    <script src="js/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tween.js@16.3.4"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <link href="css/common.css" rel="stylesheet"/>
+    <link href="css/index.css" rel="stylesheet"/>
+    <link href="css/chinamobile.css" rel="stylesheet"/>
+
+    <script type="text/javascript" charset="utf-8">
+
+        mui.init({
+            gestureConfig: {
+                tap: true, //默认为true
+            }
+
+        });
+    </script>
+
+
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>首页</title>
+</head>
+<body class="body" onload="bodyLoaded()">
+<noscript>
+    You need to enable JavaScript to run this app.
+</noscript>
+
+<!--
+  This HTML file is a template.
+  If you open it directly in the browser, you will see an empty page.
+
+  You can add webfonts, meta tags, or analytics to this file.
+  The build step will place the bundled scripts into the <body> tag.
+
+  To begin the development, run `npm start` or `yarn start`.
+  To create a production bundle, use `npm run build` or `yarn build`.
+-->
+
+<nav class="mui-bar mui-bar-tab">
+    <a class="mui-tab-item "  id="toIndex">
+        <span class="mui-icon chinamobile icon-home"></span>
+        <span class="mui-tab-label">首页</span>
+    </a>
+    <a class="mui-tab-item mui-active" id="toSecond">
+        <span class="mui-icon chinamobile icon-icon--"></span>
+        <span class="mui-tab-label">Classification</span>
+    </a>
+    <a class="mui-tab-item" id="toUser">
+        <span class="mui-icon chinamobile icon-user"></span>
+
+        <span class="mui-tab-label">个人中心</span>
+    </a>
+</nav>
+
+<div class="mui-content background m-p-h">
+    <!--<div id="root"></div>-->
+
+    <div class="user-top f-v m-p-h f-jc-c">
+        <img src="image/favicon.ico">
+    </div>
+
+</div>
+<script>
+
+    function bodyLoaded() {
+//        mui.ajax('https://www.miaokemc.com/api/indexjj/today_money', {
+//            data: {},
+//            dataType: 'json',//服务器返回json格式数据
+//            type: 'get',//HTTP请求类型
+//            timeout: 10000,//超时时间设置为10秒；
+////                    headers:{'Content-Type':'application/json'},
+//            success: function (data) {
+//                //服务器返回响应，根据响应结果，分析是否登录成功；
+//                console.log(data)
+//                if (data.status === 1) {
+//                    incomeVue.updateView(data.data);
+//
+//                } else {
+//                    if (page === 0) {
+//                        mui.confirm(data.message, "提示", ["确定"], function () {
+//                            window.location.reload();
+//                        })
+//                    } else {
+//                        mui.toast(data.message);
+//                    }
+//                }
+//
+//            },
+//            error: function (xhr, type, errorThrown) {
+//                //异常处理；
+//                console.log(type);
+//            }
+//        });
+    };
+    document.getElementById('toIndex').addEventListener('tap', function() {
+//打开关于页面
+        mui.openWindow({
+            url: 'index.html?openid='+getOpenid(), //目标页面地址
+            id:'index' //触发新打开页面的id
+        });
+    });
+    document.getElementById('toSecond').addEventListener('tap', function() {
+//打开关于页面
+        mui.openWindow({
+            url: 'second.html', //目标页面地址
+            id:'second' //触发新打开页面的id
+        });
+    });
+    document.getElementById('toUser').addEventListener('tap', function() {
+//打开关于页面
+        mui.openWindow({
+            url: 'user.html', //目标页面地址
+            id:'user' //触发新打开页面的id
+        });
+    });
+</script>
+</body>
+</html>

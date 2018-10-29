@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- ace的js,可以通过打包生成,避免引入文件数多 -->
+
+
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <link rel="Bookmark" href="/favicon.ico" >
+    <link rel="Shortcut Icon" href="/favicon.ico" />
+    <!-- bootstrap & fontawesome必须的css -->
+    <link rel="stylesheet" href="/public/ace/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/public/font-awesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="/public/datePicker/bootstrap-datepicker.css" />
+    <link rel="stylesheet" href="/public/datetimepicker/bootstrap-datetimepicker.css" />
+    <!-- 此页插件css -->
+
+    <!-- ace的css -->
+    <link rel="stylesheet" href="/public/ace/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
+    <!-- IE版本小于9的ace的css -->
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="/public/ace/css/ace-part2.min.css" class="ace-main-stylesheet" />
+    <![endif]-->
+
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="/public/ace/css/ace-ie.css" />
+    <![endif]-->
+
+    <link rel="stylesheet" href="/public/yfcmf/yfcmf.css" />
+    <!-- 此页相关css -->
+
+    <!-- ace设置处理的js -->
+    <script src="/public/ace/js/ace-extra.js"></script>
+    <!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+
+    <!--[if lte IE 8]>
+    <script src="/public/others/html5shiv.min.js"></script>
+    <script src="/public/others/respond.min.js"></script>
+    <![endif]-->
+    <!-- 引入基本的js -->
+    <script type="text/javascript">
+        var admin_ueditor_handle = "/admin/ueditor/upload.html";
+        var admin_ueditor_lang ='zh-cn';
+    </script>
+    <!--[if !IE]> -->
+    <script src="/public/others/jquery.min-2.2.1.js"></script>
+    <!-- <![endif]-->
+    <!-- 如果为IE,则引入jq1.12.1 -->
+    <!--[if IE]>
+    <script src="/public/others/jquery.min-1.12.1.js"></script>
+    <![endif]-->
+
+    <!-- 如果为触屏,则引入jquery.mobile -->
+    <script type="text/javascript">
+        if('ontouchstart' in document.documentElement) document.write("<script src='/public/others/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+    </script>
+    <script src="/public/others/bootstrap.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/others/region.js"></script>
+
+    <style>
+        .image-item {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+        }
+
+        .layer-photos-demo {
+            padding: 10px;
+        }
+        .layui-layer-photos .layui-layer-phimg img{
+            height:580px;
+        }
+    </style>
+</head>
+<body style="background: #fff;">
+<div class="">
+    <div class="col-xs-12">
+        <form class="form-horizontal ajax-form col-xs-7 " name="jubao" method="post" id="post_form"
+              action="{:url('admin/Jubao/jubao_rundispatch')}">
+            <input type="hidden" name="id" id="id" value="{$jubao.id}"/>
+            <input type="hidden" name="catid" id="catid" value="{$catid}"/>
+            <input type="hidden" name="page" id="page" value="{$page}"/>
+            <input type="hidden" name="status" id="status" value="{$status}"/>
+            <input type="hidden" name="in_dispatch_list" id="in_dispatch_list" value="{$in_dispatch_list}"/>
+            <div class="form-group" style="margin-top:10px;">
+                <label class="col-sm-2 control-label no-padding-right no-padding-left" for="form-field-1"> 违法应用： </label>
+                <div class="col-sm-10">
+                    <input type="text" name="" id="" placeholder="输入登录用户名"
+                           value="{$jubao.catname}"
+                           class="col-xs-10" required disabled/>
+                </div>
+            </div>
+            <div class="space-4"></div>
+            <div class="form-group" style="margin-top:10px;">
+                <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 违法车牌号： </label>
+                <div class="col-sm-10">
+                    <input type="text" name="" id="member_list_username" placeholder="输入登录用户名"
+                           value="{$jubao.jubao_wfcph}"
+                           class="col-xs-10" required disabled/>
+                </div>
+            </div>
+            <div class="space-4"></div>
+            <div class="form-group" style="margin-top:10px;">
+                <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 违法时间： </label>
+                <div class="col-sm-10">
+                    <input type="text" name="" id="" placeholder="输入登录用户名"
+                           value="{$jubao.jubao_wzsj}"
+                           class="col-xs-10 " required disabled/>
+                </div>
+            </div>
+            <div class="space-4"></div>
+            <div class="form-group" style="margin-top:10px;">
+                <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 违法地点： </label>
+                <div class="col-sm-10">
+                    <input type="text" name="" id="" placeholder="输入登录用户名"
+                           value="{$jubao.jubao_wfdd}"
+                           class="col-xs-10" required disabled/>
+                </div>
+            </div>
+            <div class="space-4"></div>
+
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 投诉图片： </label>
+
+                <div id="layer-photos-demo" class="layer-photos-demo col-sm-10">
+
+                    {foreach name="$jubao.images" item="vo"}
+                    <img layer-pid="" layer-src="{$vo}" onclick="showPopPhoto('{$vo}')"
+                         src="{$vo}" alt="图片名" class="image-item">
+                    {/foreach}
+                </div>
+            </div>
+            <div class="space-4"></div>
+
+            {if condition="$jubao.jubao_voice neq ''"}
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 投诉音频： </label>
+
+                <div class="layer-photos-demo">
+
+                    <span>下载</span>
+                    <a class="green" href="{:url('admin/Jubao/voice_download',array('id'=>$jubao.id))}" title="下载">
+                        <i class="ace-icon fa fa-cloud-download bigger-130"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="space-4"></div>
+            {/if}
+            {if condition="$jubao.jubao_video neq ''"}
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 投诉视频： </label>
+
+                <div class="layer-photos-demo">
+                    <video style="width:250px;  object-fit: fill;" controls>
+                        <source src='{$jubao.jubao_video}'
+                                type="video/mp4">
+                    </video>
+                </div>
+            </div>
+            <div class="space-4"></div>
+            {/if}
+
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 选择部门： </label>
+                <div class="col-sm-10">
+                    <select name="group_id"  class="col-sm-5" id="admin_group" required onChange="loadAdmins('admin_group','admins','{:url('admin/Ajax/getAdmins')}');">
+                        <option value="">请选择要分配的部门</option>
+                        {foreach name="auth_group" item="v"}
+                        <option value="{$v.id}">{$v.title}</option>
+                        {/foreach}
+                    </select>
+                    <!--<select name="admin_id" id="admins">-->
+                    <!--<option value="0">请选择待分配管理员</option>-->
+                    <!--</select>-->
+                </div>
+            </div>
+            <div class="space-4"></div>
+            <div class="clearfix form-actions" style="padding-left:0;padding-right:0;">
+                <div class="col-md-offset-3 col-md-9">
+                    <a class="btn btn-info" style="width:45%;" onclick="dosubmit();" >
+                        <i class="ace-icon fa fa-check bigger-110"></i>
+                        立即分配
+                    </a>
+                    <a class="btn btn-info" style="width:45%;" onclick="delJubao('{$jubao.id}');">
+                        <i class="ace-icon fa  bigger-110"></i>
+                        隐藏
+                    </a>
+                </div>
+            </div>
+
+
+        </form>
+
+        <div class="form-horizontal col-xs-5" style="float:left">
+            {foreach name="$logs" item="vo" key="k"}
+
+            <div class="form-group" style="margin-top:0;margin-bottom:0;">
+                <div class="col-sm-2">
+                    <i class="ace-icon fa fa-circle-o bigger-130" style="color:#00a42a"></i>
+                    <p style="width:1px;height:50px;background:#666; margin-bottom:0;   margin-left: 6px;margin-top: -4px;"></p>
+                </div>
+                <p>{$vo.log_content} </p>
+                <p style="color:#666">{$vo.log_time|date='Y-m-d H:i:s',###}</p>
+            </div>
+
+            {/foreach}
+
+            {if condition="$jubao.status eq 2"}
+            <div class="form-group" style="margin-top:0;margin-bottom:0;">
+                <div class="col-sm-2">
+                    <i class="ace-icon fa fa-circle-o bigger-130" style="color:#00a42a"></i>
+                </div>
+                <p>已结束</p>
+
+            </div>
+
+            {/if}
+
+        </div>
+    </div>
+</div>
+
+<!-- ace的js,可以通过打包生成,避免引入文件数多 -->
+<script src="/public/ace/js/ace.js"></script>
+<script src="/public/ace/js/ace.min.js"></script>
+<!-- jquery.form、layer、yfcmf的js -->
+<script src="/public/others/jquery.form.js"></script>
+<script src="/public/others/maxlength.js"></script>
+<script src="/public/layer/layer_zh-cn.js"></script>
+<script src="/public/datePicker/bootstrap-datepicker.js"></script>
+<script src="/public/datetimepicker/bootstrap-datetimepicker.js"></script>
+<script src="/public/datetimepicker/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="/public/yfcmf/yfcmf.js?1535547456"></script>
+<script>
+    function delJubao(id) {
+        // alert('dosubmit');
+        $.ajax({type: "POST", dataType: "json", url: "jubao_rundel", data: {id: id}, success: complete})
+
+        var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+        $().ajaxSubmit({
+            success: complete, // 这是提交后的方法
+            dataType: 'json'
+        });
+        function complete(data) {
+            if (data.code == 1) {
+                layer.alert(data.msg, {icon: 6}, function (index) {
+                    layer.close(index);
+                    parent.window.location.href = data.url;
+                    parent.layer.closeAll();
+                });
+            } else {
+                layer.alert(data.msg, {icon: 5}, function (index) {
+                    layer.close(index);
+                });
+            }
+            return false;
+        }
+
+        // $form = $('#post_form');
+        // $form.submit();
+        // setTimeout(function () {
+        //     parent.window.location.href = '/admin/jubao/jubao_list';
+        //     parent.layer.closeAll();
+        //
+        // }, 300);
+
+    }
+    function dosubmit() {
+        // alert('dosubmit');
+        console.log(layer);
+        var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+        $('#post_form').ajaxSubmit({
+            success: complete, // 这是提交后的方法
+            dataType: 'json'
+        });
+        function complete(data) {
+            if (data.code == 1) {
+                layer.alert(data.msg, {icon: 6}, function (index) {
+                    layer.close(index);
+                    parent.window.location.href = data.url;
+                    parent.layer.closeAll();
+                });
+            } else {
+                layer.alert(data.msg, {icon: 5}, function (index) {
+                    layer.close(index);
+                });
+            }
+            return false;
+        }
+    }
+    function showPopPhoto(image) {
+        var images = [image];
+        console.log(images);
+        var array = [];
+        for (var index = 0; index < images.length; index++) {
+            array.push({'alt': index, 'pid': index, 'src': images[index], 'thumb': images[index]});
+
+        }
+        var imageJson = {'title': index, 'id': index, 'start': 0, data: array};
+        console.log(JSON.stringify(imageJson));
+        layer.photos({
+            photos: imageJson,
+            area: ['620px', '580px']
+//        {"title":1,"id":1,"start":0,"data":[{"alt":0,"pid":0,"src":"http://jubao.muying365.net/data/upload/image/2018-08-28/1535434570.jpg","thumb":"http://jubao.muying365.net/data/upload/image/2018-08-28/1535434570.jpg"}]}
+            , anim: 1 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+        });
+    }
+</script>
+</body>
+</html>

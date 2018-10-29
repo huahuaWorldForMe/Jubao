@@ -1,0 +1,19 @@
+
+@font-face {font-family: "chinamobile";
+  src:url('../fonts/chinamobile.ttf?t=1521187864362') format('truetype'); /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+}
+
+.chinamobile {
+  font-family:"chinamobile" !important;
+  font-size:16px;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-home:before { content: "\e64f"; }
+
+.icon-user:before { content: "\e622"; }
+
+.icon-icon--:before { content: "\e735"; }
+

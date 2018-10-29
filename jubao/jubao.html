@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+
+    <meta name="theme-color" content="#000000">
+    <!--
+      manifest.json provides metadata used when your web app is added to the
+      homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+    <link rel="shortcut icon" href="image/favicon.ico">
+    <script src="js/mui.min.js"></script>
+    <script src="js/vue.min.js"></script>
+    <script src="js/cm.js"></script>
+    <script src="js/mui.picker.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tween.js@16.3.4"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+
+    <script src="https://res.wx.qq.com/open/libs/weuijs/1.0.0/weui.min.js"></script>
+    <!--<link rel="stylesheet" href="https://weui.io/weui.css"/>-->
+    <!--<link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/0.3.0/weui.css"/>-->
+    <!--<link rel="stylesheet" href="https://cdn.bootcss.com/jquery-weui/1.2.0/css/jquery-weui.min.css">-->
+
+    <link href="css/weui.css" rel="stylesheet"/>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <link href="css/common.css" rel="stylesheet"/>
+    <link href="css/index.css" rel="stylesheet"/>
+
+
+    <script type="text/javascript" charset="utf-8">
+
+        mui.init({
+            gestureConfig: {
+                tap: true, //默认为true
+            }
+
+        });
+    </script>
+
+    <style>
+        .start_btn_in, .stop_btn {
+            color: #f00;
+            border: #f00 solid 2px;
+        }
+
+        .video-item {
+            width: 79px;
+            height: 79px;
+            object-fit: fill;
+        }
+    </style>
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>举报</title>
+</head>
+<body class="body" onload="bodyLoaded()" style="background:#f8f8f8">
+<noscript>
+    You need to enable JavaScript to run this app.
+</noscript>
+
+<!--
+  This HTML file is a template.
+  If you open it directly in the browser, you will see an empty page.
+
+  You can add webfonts, meta tags, or analytics to this file.
+  The build step will place the bundled scripts into the <body> tag.
+
+  To begin the development, run `npm start` or `yarn start`.
+  To create a production bundle, use `npm run build` or `yarn build`.
+-->
+
+<!--<header class="mui-bar mui-bar-nav nav-bar">-->
+<!--<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left t-f-c-w"></a>-->
+<!--<h1 class="mui-title title" id="packageTitle">{{name}}</h1>-->
+<!--</header>-->
+<div class="mui-content  m-p-h  f-v f-jc-c ">
+    <!--<div id="root"></div>-->
+    <form class="f-v m-p-h-90      m-b-20" id="formPost">
+        <!--<div class="f-v m-p-h-95 bg-white  m-t-10   m-b-20 p-l-10 p-r-10 ">-->
+
+        <img :src="image" class="jubao-top-img"/>
+
+        <div class="f-v m-p-h     f-ai-fs    ">
+            <!--<div class="weui_cells_title">现场照片</div>-->
+            <!--图片上传-->
+            <div class="weui-gallery bg-white" id="gallery">
+                <span class="weui-gallery__img" id="galleryImg"></span>
+                <div class="weui-gallery__opr">
+                    <a href="javascript:" class="weui-gallery__del">
+                        <i class="weui-icon-delete weui-icon_gallery-delete"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="weui-cells weui-cells_form m-p-h f-ai-fs">
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">
+                        <div class="weui-uploader">
+                            <div class="weui-uploader__hd">
+                                <p class="weui-uploader__title">现场照片</p>
+                                <p class="weui_cell_ft js_counter">0/3</p>
+
+                            </div>
+                            <div class="weui-uploader__bd">
+                                <ul class="weui-uploader__files" id="uploaderFiles">
+
+                                </ul>
+                                <div class="weui-uploader__input-box">
+                                    <input id="uploaderInput" class="weui-uploader__input zjxfjs_file" type="file"
+                                           accept="image/*" multiple="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="weui-cell bg-white m-p-h m-t-10">
+                <div class="weui-cell__bd">
+                    <div class="weui-uploader">
+                        <div class="weui-uploader__hd">
+                            <p class="weui-uploader__title">违法语音描述</p>
+
+                        </div>
+                        <div class="weui-uploader__bd">
+                            <ul class="weui-uploader__files" id="uploaderVoiceFiles">
+
+                            </ul>
+                            <a class="weui-uploader__file voice_btn " id="start_btn"
+                               style="background-image:url(https://mp.ewm123.cn/addons/gd_zlyqk//static/mobile/images/voice.png);border:1px solid #D9D9D9;"></a>
+                            <p id="voice_record" style="line-height: 79px" class="">按住不松说话，说完松开即可</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="weui-cell bg-white m-p-h m-t-10">
+                <div class="weui-cell__bd">
+                    <div class="weui-uploader">
+                        <div class="weui-uploader__hd">
+                            <p class="weui-uploader__title">违法视频</p>
+
+                        </div>
+                        <div class="weui-uploader__bd">
+                            <ul class="weui-uploader__files" id="uploadVideo">
+
+                            </ul>
+                            <div class="weui-uploader__input-box">
+                                <input id="uploaderVideoInput" class="weui-uploader__input zjxfjs_file" type="file"
+                                       accept="video/mp4" multiple="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="weui-cells weui-cells_form m-p-h" style="margin-top:10px;">
+
+                <div class="weui-cell them-cell">
+                    <div class="weui-cell__hd">
+                        <label for="" class="weui-label  them-title"> 违法车牌号</label>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <input
+                                style="width: 100%;
+border: 0;
+outline: 0;
+padding:0;
+margin:0;
+-webkit-appearance: none;
+background-color: transparent;
+font-size: inherit;
+color: inherit;
+height: 1.47058824em;
+line-height: 1.47058824;"
+                                id="wfcph"
+                                class="weui-input  weiui-require  " value="" name="wfcph" data-msg="请填写违法车牌号"
+                                nullmsg="请填写违法车牌号" datatype="*" placeholder="新M" type="text"
+                        >
+                    </div>
+                </div>
+                <div class="weui-cell them-cell">
+                    <div class="weui-cell__hd">
+                        <label for="" class="weui-label  them-title"> 违法时间</label>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <input
+                                style="width: 100%;
+border: 0;
+outline: 0;
+padding:0;
+margin:0;
+-webkit-appearance: none;
+background-color: transparent;
+font-size: inherit;
+color: inherit;
+height: 1.47058824em;
+line-height: 1.47058824;"
+                                class="weui-input date_ui  " name="wzsj" value="" data-msg="请选择时间"
+                                id="wzsj"
+
+                                placeholder="填写违法时间" type="datetime-local">
+                    </div>
+                </div>
+                <div class="weui-cell them-cell">
+                    <div class="weui-cell__hd">
+                        <label for="" class="weui-label  them-title"> 违法地点</label>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <input
+                                style="width: 100%;
+border: 0;
+outline: 0;
+padding:0;
+margin:0;
+-webkit-appearance: none;
+background-color: transparent;
+font-size: inherit;
+color: inherit;
+height: 1.47058824em;
+line-height: 1.47058824;"
+                                class="weui-input  " value="" name="wfdd" data-msg="请填写违法地点" placeholder="如：石化大道"
+                                id="wfdd"
+                                type="text">
+                    </div>
+                </div>
+                <div class="weui-cell them-cell">
+                    <div class="weui-cell__hd">
+                        <label for="" class="weui-label  them-title"> 手机号码</label>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <input
+                                style="width: 100%;
+border: 0;
+outline: 0;
+padding:0;
+margin:0;
+-webkit-appearance: none;
+background-color: transparent;
+font-size: inherit;
+color: inherit;
+height: 1.47058824em;
+line-height: 1.47058824;"
+                                class="weui-input  " value="" name="sjhm" data-msg="请填写手机号码"
+                                id="sjhm"
+                                placeholder="您的联系方式（选填）"
+                                type="number">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--<div class='title'><audio controls="controls" src="http://jubao.muying365.net/data/upload/voice/2018-08-27/1535363943.amr">您的浏览器不支持 audio 标签。</audio></div>-->
+        <button type="button" class=" m-p-h mui-btn mui-btn-danger m-t-10 m-b-20 bg-main-yellow" style="height:40px;"
+                @click="submit">我要举报
+        </button>
+        <!-- loading toast -->
+        <div id="loadingToast" style="display: none;">
+            <div class="weui-mask_transparent"></div>
+            <div class="weui-toast">
+                <i class="weui-loading weui-icon_toast"></i>
+                <p class="weui-toast__content">处理中</p>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+
+<script src="https://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+<!--<script src="https://cdn.bootcss.com/jquery-weui/1.2.0/js/jquery-weui.min.js"></script>-->
+
+
+<script>
+    var id = '';
+    var cities = [];
+    var areas = [];
+    var package = {};
+    var uid = '';
+    var serverId;
+
+    var images = '';
+    var video = '';
+    function showLoading(show) {
+        var $loadingToast = $('#loadingToast');
+        if (show) $loadingToast.fadeIn(100);
+        else $loadingToast.fadeOut(100);
+    }
+
+    var formVue = new Vue({
+        el: '#formPost',
+        data: {
+            image: '',
+            name: ''
+        },
+        methods: {
+
+            updateData: function (newData) {
+                this.image = newData.image;
+                this.name = newData.name;
+            },
+            updateArea: function (newArea, newSelectAreaid) {
+                this.client_area = newArea;
+                this.selectAreaId = newSelectAreaid;
+            },
+            submit: function () {
+                var tel = $('#sjhm').val();
+                var wfcph = $('#wfcph').val();
+                var vzsj=$('#wzsj').val();
+//                alert(vzsj);
+//                console.log(vzsj.val());
+//                alert(JSON.stringify(wzsj));
+                if (wfcph === undefined) {
+                    mui.toast('请输入违法车牌号');
+                    return;
+                }
+                showLoading(true);
+                mui.ajax('../api/Index/jubao_post', {
+                    data: {
+                        id: id,
+                        openid: getOpenid(),
+                        images: images,
+                        wfcph: wfcph,
+                        wzsj: vzsj,
+                        wfdd: $('#wfdd').val(),
+                        sjhm: tel,
+                        video: video,
+                        serverId: serverId
+                    },
+                    dataType: 'json',//服务器返回json格式数据
+                    type: 'get',//HTTP请求类型
+                    timeout: 10000,//超时时间设置为10秒；
+//                    headers:{'Content-Type':'application/json'},
+                    success: function (data) {
+                        //服务器返回响应，根据响应结果，分析是否登录成功；
+                        console.log(data)
+                        showLoading(false);
+                        if (data.status === 1) {
+                            mui.confirm(data.message, "提示", ["确定"], function () {
+                                window.location.href=data.data;
+                            });
+
+//                            mui.confirm("登录成功"+storage.getItem('is_login'), "提示", ["确定"], function () {
+//                            })
+                        } else {
+                            mui.confirm(data.message, "提示", ["确定"], function () {
+                            })
+                        }
+                    },
+                    error: function (xhr, type, errorThrown) {
+                        //异常处理；
+                        console.log(xhr);
+                        console.log(errorThrown);
+                        showLoading(false);
+                        mui.toast(xhr+errorThrown)
+                    }
+                });
+
+            }
+        }
+    })
+
+
+    var packageTitleEl = new Vue({
+        el: "#packageTitle",
+        data: {
+
+            package_title: ''
+        },
+        methods: {
+
+            updateTitle: function (newTitle) {
+                this.package_title = newTitle;
+            }
+
+        }
+    });
+
+
+    function bodyLoaded() {
+        id = getQueryString('id');
+        var storage;
+        var isLogin = 0;
+        // if (window.localStorage) {
+        //     storage = window.localStorage;
+        //     uid = storage.getItem('uid');
+        //     isLogin = storage.getItem('is_login');
+        // }
+        // if (!is_login_success()) {
+        //     window.location.href = './login.html?callback=./pre_order.html?id=' + id;
+        // }
+        // console.log('is_login:' + is_login_success());
+
+        mui.ajax('http://jubao.muying365.net/api/Index/jubao_info', {
+            data: {id: id},
+            dataType: 'json',//服务器返回json格式数据
+            type: 'get',//HTTP请求类型
+            timeout: 10000,//超时时间设置为10秒；
+//                    headers:{'Content-Type':'application/json'},
+            success: function (data) {
+                //服务器返回响应，根据响应结果，分析是否登录成功；
+                console.log(data)
+                if (data.status === 1) {
+                    formVue.updateData(data.data)
+                } else {
+
+                    mui.toast(data.message);
+
+                }
+
+            },
+            error: function (xhr, type, errorThrown) {
+                //异常处理；
+                console.log(type);
+            }
+        });
+
+        mui.ajax('http://jubao.muying365.net/api/Index/getSignPackage', {
+            data: {'request_url': window.location.href},
+            dataType: 'json',//服务器返回json格式数据
+            type: 'post',//HTTP请求类型
+            timeout: 10000,//超时时间设置为10秒；
+//                    headers:{'Content-Type':'application/json'},
+            success: function (data) {
+                //服务器返回响应，根据响应结果，分析是否登录成功；
+//                console.log(data)
+                if (data.status === 1) {
+                    appId = data.data.appId;
+                    timestamp = data.data.timestamp;
+                    nonceStr = data.data.nonceStr;
+                    signature = data.data.signature;
+                    payParams = data.data;
+                    wx.config({
+                        debug: false,
+                        appId: appId,
+                        timestamp: timestamp,
+                        nonceStr: nonceStr,
+                        signature: signature,
+                        jsApiList: [
+                            // 所有要调用的 API 都要加到这个列表中
+                            'startRecord', 'stopRecord', 'onVoiceRecordEnd', 'playVoice', 'stopVoice', 'onVoicePlayEnd', 'uploadVoice'
+                        ]
+                    });
+                    wx.ready(function () {
+                        //返回音频的本地ID
+                        var localId;
+                        //返回音频的服务器端ID
+                        //录音计时,小于指定秒数(minTime = 10)则设置用户未录音
+                        var startTime, endTime, minTime = 2;
+
+
+                        //***********************************//
+
+
+                        //开始录音
+                        $('#start_btn').on('touchstart', function (e) {
+                            e.preventDefault();
+                            var $this = $(this);
+                            startTime = new Date().getTime();
+                            $('#voice_record').addClass("block")
+                            $('#voice_record').text('录音中');
+                            //开始录音
+                            wx.startRecord();
+                        });
+                        //***********************************//
+                        //停止录音接口
+                        $('#start_btn').on('touchend', function () {
+                            var $this = $(this);
+                            $('#voice_record').removeClass('block');
+                            mui.toast('录音结束');
+                            $('#voice_record').text('按住不松说话，说完松开即可');
+
+                            //停止录音接口
+                            wx.stopRecord({
+                                success: function (res) {
+                                    localId = res.localId;
+
+                                    endTime = new Date().getTime();
+//                            alert((endTime - startTime) / 1000);
+                                    if ((endTime - startTime) / 1000 < minTime) {
+                                        localId = '';
+                                        mui.toast('录音少于' + minTime + '秒，录音失败，请重新录音');
+                                        return;
+                                    }
+
+                                    //上传语音接口
+                                    wx.uploadVoice({
+                                        //需要上传的音频的本地ID，由 stopRecord 或 onVoiceRecordEnd 接口获得
+                                        localId: localId,
+                                        //默认为1，显示进度提示
+                                        isShowProgressTips: 1,
+                                        success: function (res) {
+                                            //返回音频的服务器端ID
+                                            serverId = res.serverId;
+                                            mui.toast('语音上传成功');
+
+                                        }
+                                    });
+
+                                }
+                            });
+
+
+                        });
+                        //监听录音自动停止接口
+                        wx.onVoiceRecordEnd({
+                            //录音时间超过一分钟没有停止的时候会执行 complete 回调
+                            complete: function (res) {
+                                localId = res.localId;
+
+                                $('.start_btn').removeClass('start_btn_in');
+                            }
+                        });
+
+
+                        //***********************************//
+
+
+                        $('.play_btn').on('click', function () {
+                            if (!localId) {
+                                alert('您还未录音，请录音后再点击播放');
+                                return;
+                            }
+                            var $this = $(this);
+                            if ($this.hasClass('stop_btn')) {
+                                $(this).removeClass('stop_btn').text('点我播放');
+
+                                //		//暂停播放接口
+                                //		wx.pauseVoice({
+                                //			//需要暂停的音频的本地ID，由 stopRecord 或 onVoiceRecordEnd 接口获得
+                                //			localId: localId
+                                //		});
+
+                                //停止播放接口
+                                wx.stopVoice({
+                                    //需要停止的音频的本地ID，由 stopRecord 或 onVoiceRecordEnd 接口获得
+                                    localId: localId
+                                });
+                            } else {
+                                $this.addClass('stop_btn').text('点我停止');
+
+                                //播放语音接口
+                                wx.playVoice({
+                                    //需要播放的音频的本地ID，由 stopRecord 或 onVoiceRecordEnd 接口获得
+                                    localId: localId
+                                });
+                            }
+                        });
+                        //监听语音播放完毕接口
+                        wx.onVoicePlayEnd({
+                            //需要下载的音频的服务器端ID，由uploadVoice接口获得
+                            serverId: localId,
+                            success: function (res) {
+                                $('.play_btn').removeClass('stop_btn').text('点我播放');
+
+                                //返回音频的本地ID
+                                //localId = res.localId;
+                            }
+                        });
+
+
+                        //***********************************//
+
+
+                        //上传语音接口
+                        // $('.send_btn').on('click', function () {
+                        //
+                        // });
+
+                    });
+//                    wx.ready(function () {
+//                        // 在这里调用 API
+//                    });
+                } else {
+                    if (page === 0) {
+                        mui.confirm(data.message, "提示", ["确定"], function () {
+                            window.location.reload();
+                        })
+                    } else {
+                        mui.toast(data.message);
+                    }
+                }
+
+            },
+            error: function (xhr, type, errorThrown) {
+                //异常处理；
+                console.log(type);
+            }
+        });
+
+
+    }
+
+
+    $(function () {
+        // 允许上传的图片类型
+        var allowTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif'];
+        // 1024KB，也就是 1MB
+        var maxSize = 1024 * 1024;
+        // 图片最大宽度
+        var maxWidth = 300;
+        // 最大上传图片数量
+        var maxCount = 3;
+        var tmpl = '<li class="weui-uploader__file" style="background-image:url(#url#)"></li>';
+//        var tmplVideo = '<li class="weui-uploader__file " ><video class="video-item" id="input_video"> <source src="#url#" type="video/mp4" poster=""></li>';
+        $gallery = $("#gallery");
+        $galleryImg = $("#galleryImg");
+        $uploaderFiles = $("#uploaderFiles");
+        $uploaderInput = $("#uploaderInput");
+
+        $uploadVideo = $("#uploadVideo");
+        $uploaderVideoInput = $("#uploaderVideoInput");
+        $uploaderVideoInput.on('change', function (e) {
+            var src, url = window.URL || window.webkitURL || window.mozURL,
+                files = e.target.files;
+            if ($('.video-item').length > 1) {
+                mui.toast('最多只能上传' + 1 + '个视频');
+                return;
+            }
+            for (var i = 0, len = files.length; i < len; ++i) {
+                var file = files[i];
+                if (file.type != 'video/mp4') {
+                    mui.toast('请上传mp4格式视频'+file.type);
+                    return;
+                }
+                if (file.size > 41943040) {
+                    mui.toast('视频大小不能超过40M');
+                    return;
+                }
+                console.log(file);
+                if (url) {
+                    src = url.createObjectURL(file);
+                } else {
+                    src = e.target.result;
+                }
+
+                $uploadVideo.append($(tmpl.replace('#url#', 'http://jubao.muying365.net/public/img/choosed.png')));
+
+
+                var reader = new FileReader();
+                showLoading(true);
+                reader.onload = function (e) {
+
+                    console.log(e);
+                    $.post("/api/Index/uploadVideo", {video: e.target.result}, function (res) {
+                        if (res.img != '') {
+                            showLoading(false)
+                            video = res.img;
+                            console.log(images);
+                            // alert('upload success');
+                            // $('#showimg').html('<img src="' + res.img + '">');
+
+                        } else {
+                            mui.toast('upload fail');
+                        }
+                    }, 'json');
+                };
+                reader.readAsDataURL(file);
+
+
+            }
+        });
+        $uploaderInput.on("change", function (e) {
+            var src, url = window.URL || window.webkitURL || window.mozURL,
+                files = e.target.files;
+            if ($('.weui-uploader__file').length > maxCount) {
+                mui.toast('最多只能上传' + maxCount + '张图片');
+                return;
+            }
+            for (var i = 0, len = files.length; i < len; ++i) {
+                var file = files[i];
+
+                if (url) {
+                    src = url.createObjectURL(file);
+                } else {
+                    src = e.target.result;
+                }
+
+                $uploaderFiles.append($(tmpl.replace('#url#', src)));
+                var num = $('.weui-uploader__file').length;
+                $('.js_counter').text((num - 1) + '/' + maxCount);
+                // $.post("/api/Upload/uploadImage", {img: e.target.result}, function (res) {
+                //     if (res.img != '') {
+                //         alert('upload success');
+                //         $('#showimg').html('<img src="' + res.img + '">');
+                //     } else {
+                //         alert('upload fail');
+                //     }
+                // }, 'json');
+// console.log(e);
+
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    var img = new Image();
+
+                    img.src = e.target.result;
+
+                    $.post("/api/Index/uploadImage", {img: e.target.result}, function (res) {
+                        if (res.img != '') {
+                            images += res.img + ",";
+                            console.log(images);
+                            // alert('upload success');
+                            // $('#showimg').html('<img src="' + res.img + '">');
+
+                        } else {
+                            mui.toast('upload fail');
+                        }
+                    }, 'json');
+                };
+                reader.readAsDataURL(file);
+
+
+            }
+        });
+
+        var index; //第几张图片
+        $uploaderFiles.on("click", "li", function () {
+            index = $(this).index();
+            $galleryImg.attr("style", this.getAttribute("style"));
+            $gallery.fadeIn(100);
+        });
+        $gallery.on("click", function () {
+            $gallery.fadeOut(100);
+        });
+        //删除图片
+        $(".weui-gallery__del").click(function () {
+            $uploaderFiles.find("li").eq(index).remove();
+        });
+    });
+</script>
+</body>
+</html>

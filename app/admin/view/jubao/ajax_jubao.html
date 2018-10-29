@@ -1,0 +1,79 @@
+{foreach name="jubao_list" item="v"}
+<tr>
+
+
+    <!--<td class="hidden-xs" height="28">{$v.id}</td>-->
+    <td class="hidden-xs" height="28">{$v.jubao_no}</td>
+    <td>{$v.catname}</td>
+    <td class="hidden-sm hidden-xs">
+        {if condition="$v.status eq 0"}待分配
+        {elseif condition="$v.status eq 1"/}待处理
+        {elseif condition="$v.status eq 2"/}已处理
+        {elseif condition="$v.status eq 3"/}未知
+        {elseif condition="$v.status eq 9"/}已隐藏
+        {else /}未知
+        {/if}
+    </td>
+    <td class="hidden-sm hidden-xs">{$v.spend_time}</td>
+    <td class="hidden-sm hidden-xs">{$v.jubao_sjhm}</td>
+    <td class="hidden-sm hidden-xs">{$v.post_time|date='Y-m-d H:i:s',###}</td>
+
+    <td class="hidden-sm hidden-xs ">
+        {if condition="$v.status eq 0"}
+        <a href="javascript:void(0)" class="red open-btn" data-id="{$v.id}" title="已开启"
+           onclick="dispatchJubao('{$v.id}')">
+            <button class="btn btn-minier btn-warning">分配</button>
+        </a>
+        {elseif condition="$v.status eq 1"/}
+
+
+
+        {elseif condition="$v.status eq 2"/}
+        <a href="javascript:void(0)" class="red open-btn" data-id="{$v.id}" title="已开启"
+           onclick="showDetail('{$v.id}',1)">
+            <button class="btn btn-minier btn-yellow">查看</button>
+        </a>
+        {elseif condition="$v.status eq 3"/}
+        <a href="javascript:void(0)" class="red open-btn" data-id="{$v.id}" title="已开启"
+           onclick="showDetail('{$v.id}',1)">
+            <button class="btn btn-minier btn-yellow">查看</button>
+        </a>
+        {elseif condition="$v.status eq 4"/}举报已结束
+        {/if}
+
+        {if condition="$show_handle eq 1"}
+        <a href="javascript:void(0)" class="red open-btn" data-id="{$v.id}" title="已开启"
+           onclick="showDetail('{$v.id}',0)">
+            {if condition="$v.status eq 1"}
+            <button class="btn btn-minier btn-danger">处理</button>
+            {/if}
+        </a>
+        {elseif condition="$show_handle neq 1"/}
+        <a href="javascript:void(0)" class="red open-btn" data-id="{$v.id}" title="已开启"
+           onclick="showDetail('{$v.id}',1)">
+            <button class="btn btn-minier btn-yellow">查看</button>
+        </a>
+
+        {/if}
+        {if condition="$v.status neq 9"}
+        <a href="{:url('admin/Jubao/jubao_rundel',array('id'=>$v['id']))}" class="red open-btn" data-id="{$v.id}"
+           title="已开启">
+            <button class="btn btn-minier btn-danger">隐藏</button>
+        </a>
+
+        {/if}
+    </td>
+    <td class="hidden-sm hidden-xs">
+        {if condition="$v.status eq 0"}举报信息提交成功
+        {elseif condition="$v.status eq 1"/}举报信息待处理
+        {elseif condition="$v.status eq 2"/}举报结果已经反馈
+        {elseif condition="$v.status eq 3"/}举报已结束
+        {elseif condition="$v.status eq 9"/}举报已隐藏
+        {/if}
+    </td>
+
+</tr>
+{/foreach}
+<tr>
+    <td height="50" colspan="12" align="left">{$page}</td>
+</tr>

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+
+    <meta name="theme-color" content="#000000">
+    <!--
+      manifest.json provides metadata used when your web app is added to the
+      homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+    <link rel="shortcut icon" href="image/favicon.ico">
+    <script src="js/mui.min.js"></script>
+    <script src="js/vue.min.js"></script>
+    <script src="js/cm.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tween.js@16.3.4"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <link href="css/common.css" rel="stylesheet"/>
+    <link href="css/index.css" rel="stylesheet"/>
+    <link href="css/chinamobile.css" rel="stylesheet"/>
+    <script type="text/javascript" charset="utf-8">
+
+        mui.init({
+            gestureConfig: {
+                tap: true //默认为true
+            }
+
+        });
+    </script>
+
+
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>举报平台</title>
+</head>
+<body class="body" onload="bodyLoaded()">
+<noscript>
+    You need to enable JavaScript to run this app.
+</noscript>
+
+<!--
+  This HTML file is a template.
+  If you open it directly in the browser, you will see an empty page.
+
+  You can add webfonts, meta tags, or analytics to this file.
+  The build step will place the bundled scripts into the <body> tag.
+
+  To begin the development, run `npm start` or `yarn start`.
+  To create a production bundle, use `npm run build` or `yarn build`.
+-->
+
+<!--<header class="mui-bar mui-bar-nav nav-bar">-->
+<!--&lt;!&ndash;<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>&ndash;&gt;-->
+<!--<h1 class="mui-title title">首页</h1>-->
+<!--</header>-->
+<!--<nav class="mui-bar mui-bar-tab">-->
+<!--<a class="mui-tab-item mui-active" id="toIndex">-->
+<!--<span class="mui-icon chinamobile icon-home"></span>-->
+<!--<span class="mui-tab-label">首页</span>-->
+<!--</a>-->
+<!--<a class="mui-tab-item" id="toSecond">-->
+<!--<span class="mui-icon chinamobile icon-icon&#45;&#45;"></span>-->
+<!--<span class="mui-tab-label">Classification</span>-->
+<!--</a>-->
+<!--<a class="mui-tab-item" id="toUser">-->
+<!--<span class="mui-icon chinamobile icon-user"></span>-->
+
+<!--<span class="mui-tab-label">个人中心</span>-->
+<!--</a>-->
+<!--</nav>-->
+
+<div class="mui-content background m-p-h">
+    <!--<div id="root"></div>-->
+
+    <div id="top">
+
+        <div class="mui-slider" id="banner-list" style="height:auto">
+            <div class="mui-slider-group mui-slider-loop">
+                <!--支持循环，需要重复图片节点-->
+
+                <div class="mui-slider-item mui-slider-item-duplicate">
+                    <a :href="banner_end.banner_url"><img :src="banner_end.banner_img"/></a>
+                </div>
+
+                <div class="mui-slider-item" v-for="item in banners" :key="item.id">
+                    <a :href="item.banner_url"><img :src="item.banner_img"/></a>
+                </div>
+                <div class="mui-slider-item mui-slider-item-duplicate"><a :href="banner_first.banner_url"><img
+                        :src="banner_first.banner_img"/></a>
+                </div>
+                <!--<div class="mui-slider-item">-->
+                <!--<a href="#"><img src="https://www.miaokemc.com/data/upload/2018-03-20/5ab09b0f46619.jpg"/></a>-->
+                <!--</div>-->
+                <!--<div class="mui-slider-item">-->
+                <!--<a href="#"><img src="https://www.miaokemc.com/data/upload/2018-03-20/5ab09b029f548.jpg"/></a>-->
+                <!--</div>-->
+                <!--<div class="mui-slider-item">-->
+                <!--<a href="#"><img src="https://www.miaokemc.com/data/upload/2018-03-20/5ab09aecda3d3.jpg"/></a>-->
+                <!--</div>-->
+
+
+            </div>
+        </div>
+
+
+        <div id="bulletin" class="bulletin">
+            <img src="https://mp.ewm123.cn/addons/gd_zlyqk//static/sy/img/bulletin.png"/>
+            <span class="m-l-5">公告：
+                <span  @click="toUrl(noticeUrl)">举报人告知书</span>
+                </span>
+        </div>
+    </div>
+
+    <!--数据列表-->
+    <ul class=" f-v m-p-h p-0 m-0" id="index-list">
+        <li class="f-v m-p-h  bg-white" v-for="item in dataList" :key="item.id">
+            <div class="f-f-h m-p-h index-item">
+
+                <div class="f-f-h m-p-h  bg-white" @click="jubao(item.catid)">
+                    <img :src="item.icon" class="index-icon m-l-10"/>
+
+                    <div class="f-v m-l-20 flex-weight1 f-ai-fs">
+
+                        <span class="flex-weight1 t-f-s-13 t-f-c-3 index-name">{{item.catname}}</span>
+                        <span class="flex-weight1 t-f-s-13 t-f-c-3 m-t-5">{{item.intro}}</span>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </li>
+        <div class="divider-h"></div>
+
+    </ul>
+
+    <style>
+        .weui-tabbar {
+            position: fixed;
+            background: #FFFFFF;
+        }
+
+        .weui-tabbar__item {
+            display: block;
+            -webkit-box-flex: 1;
+            -webkit-flex: 1;
+            flex: 1;
+            padding: 5px 0 0;
+            font-size: 0;
+            color: #999;
+            text-align: center;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        }
+
+        .weui-tabbar .weui-tabbar__item img {
+            display: block;
+            width: 22px;
+            height: 22px;
+            margin: 0 auto;
+        }
+
+        a img {
+            border: 0;
+        }
+    </style>
+
+</div>
+<script>
+    var page = 0;
+
+
+    var listVue = new Vue({
+        el: "#index-list",
+        data: {
+            dataList: []
+        },
+        methods: {
+            resetData: function () {
+                this.dataList = [];
+            },
+            addData: function (data) {
+                if (this.dataList.length === 0)
+                    this.dataList = data;
+                else {
+                    this.dataList = this.dataList.concat(data)
+
+                }
+            },
+            jubao:function(id){
+                mui.openWindow({
+                    url: 'jubao.html?id='+id, //目标页面地址
+                    id: 'newUrl' //触发新打开页面的id
+                });
+            }
+        }
+    });
+
+
+    var incomeVue = new Vue({
+        el: '#top',
+        data: {
+            banners: [],
+            banner_first: {},
+            banner_end: {},
+            noticeUrl:''
+        },
+        methods: {
+            updateView: function (data) {
+                this.banners = data.banner;
+                this.noticeUrl=data.noticeUrl;
+                this.banner_first = data.banner_first;
+                this.banner_end = data.banner_end;
+                this.dataList = data.packages;
+                Vue.nextTick(function () {
+                    var gallery = mui('.mui-slider');
+                    gallery.slider({
+                        interval: 2000,//自动轮播周期，若为0则不自动播放，默认为0；
+                    });
+                });
+
+            },
+            toUrl: function (url) {
+                // alert(url);
+                mui.openWindow({
+                    url: url, //目标页面地址
+                    id: 'newUrl' //触发新打开页面的id
+                });
+            },
+
+        },
+        mounted: function () {
+
+        }
+    });
+    var openid = '';
+
+
+    function bodyLoaded() {
+        openid = getQueryString('openid');
+
+        mui.ajax('http://jubao.muying365.net/api/Index/index', {
+            data: {},
+            dataType: 'json',//服务器返回json格式数据
+            type: 'get',//HTTP请求类型
+            timeout: 10000,//超时时间设置为10秒；
+//                    headers:{'Content-Type':'application/json'},
+            success: function (data) {
+                //服务器返回响应，根据响应结果，分析是否登录成功；
+//                console.log(data)
+                if (data.status === 1) {
+                    incomeVue.updateView(data.data)
+                    listVue.addData(data.data.package_cat);
+                    if (null === openid || '' === openid) {
+                        mui.confirm('授权信息拉取失败，请通过授权', "提示", ["确定"], function () {
+                            window.location.href = data.data.oauth_url;
+                        })
+                    } else {
+                        var storage = null;
+                        if (window.localStorage) {              //判断浏览器是否支持localStorage
+                            storage = window.localStorage;
+                            storage.setItem("openid", openid);
+                        }
+                    }
+                } else {
+                    if (page === 0) {
+                        mui.confirm(data.message, "提示", ["确定"], function () {
+                            window.location.reload();
+                        })
+                    } else {
+                        mui.toast(data.message);
+                    }
+                }
+
+            },
+            error: function (xhr, type, errorThrown) {
+                //异常处理；
+                console.log(type);
+            }
+        });
+
+//        mui.ajax('http://mobile.muying365.net/api/cmindex/package_list', {
+//            data: {},
+//            dataType: 'json',//服务器返回json格式数据
+//            type: 'get',//HTTP请求类型
+//            timeout: 10000,//超时时间设置为10秒；
+////                    headers:{'Content-Type':'application/json'},
+//            success: function (data) {
+//                //服务器返回响应，根据响应结果，分析是否登录成功；
+////                console.log(data)
+//                if (data.status === 1) {
+//                    listVue.addData(data.data);
+//
+//                } else {
+//                    if (page === 0) {
+//                        mui.confirm(data.message, "提示", ["确定"], function () {
+//                            window.location.reload();
+//                        })
+//                    } else {
+//                        mui.toast(data.message);
+//                    }
+//                }
+//
+//            },
+//            error: function (xhr, type, errorThrown) {
+//                //异常处理；
+//                console.log(type);
+//            }
+//        });
+    }
+
+    //     document.getElementById('toIndex').addEventListener('tap', function () {
+    // //打开关于页面
+    //         mui.openWindow({
+    //             url: 'index.html?openid=' + getOpenid(), //目标页面地址
+    //             id: 'index' //触发新打开页面的id
+    //         });
+    //     });
+    //     document.getElementById('toSecond').addEventListener('tap', function () {
+    // //打开关于页面
+    //         mui.openWindow({
+    //             url: 'second.html', //目标页面地址
+    //             id: 'second' //触发新打开页面的id
+    //         });
+    //     });
+    //     document.getElementById('toUser').addEventListener('tap', function () {
+    // //打开关于页面
+    //         mui.openWindow({
+    //             url: 'user.html', //目标页面地址
+    //             id: 'user' //触发新打开页面的id
+    //         });
+    //     });
+</script>
+</body>
+</html>

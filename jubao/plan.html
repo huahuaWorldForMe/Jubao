@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+
+    <meta name="theme-color" content="#000000">
+    <!--
+      manifest.json provides metadata used when your web app is added to the
+      homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
+    -->
+
+
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <script type="text/javascript">
+    function updateStoreNum(num,status) {
+                 var storeNumEl = document.getElementById("store_num");
+                while(storeNumEl.hasChildNodes()) //当div下还存在子节点时 循环继续
+                {
+                       storeNumEl.removeChild(storeNumEl.firstChild);
+                }
+
+            for (var i = 0; i < num.length; i++) {
+                var sp = document.createElement("span");
+                sp.className = "store-num";
+                sp.innerHTML = num[i];
+                storeNumEl.appendChild(sp);
+            }
+            var joinStatusEl = document.getElementById("join_status");
+          var addBottomEl = document.getElementById("add_bottom");
+          if(status==1){
+           joinStatusEl.innerHTML = "您已加入诚信保障计划";
+           addBottomEl.style.display="none";
+          }
+        }
+
+
+    </script>
+    <style>
+
+        .auto-image {
+            border: 0;
+            max-width: 100%;
+        }
+
+        body {
+            margin: 0 auto;
+            max-width: 30rem;
+            text-align: center;
+        }
+
+        .image-container {
+            font-size: 0;
+            background-color: white;
+        }
+
+        .join-normal {
+            color: #333;
+            font-size: .8rem;
+        }
+
+        .store-num {
+            background: #eb5300;
+            color: white;
+            padding: 1px;
+            font-size: .8rem;
+            margin-left:1px;
+            margin-right:1px;
+        }
+
+        .join {
+            background: #eb5300;
+            width: 7rem;
+            color: white;
+            padding-top:5px;
+            padding-bottom:5px;
+            text-align: center;
+            font-size:10px;
+            border-radius: 2px;
+            position: absolute;
+            left: 50%;
+            right: 50%;
+            margin: 0;
+        }
+
+
+    </style>
+</head>
+<body class="body" onload="bodyLoaded()">
+<noscript>
+    You need to enable JavaScript to run this app.
+</noscript>
+
+
+<div>
+    <!--<div id="root"></div>-->
+    <div class="image-container">
+        <img src="image/plan_1.png" class="auto-image"/>
+        <img src="image/plan2.png" class="auto-image">
+
+    </div>
+    <div style="position:relative;height:9rem;padding-left:1rem;padding-right:1rem;">
+        <img src="image/plan2_left.png"
+             style="float: left;width: 7rem;height: auto;"/>
+
+        <div style="padding-top: 1.3rem;">
+
+            <div>
+
+                <span class="join-normal">已有</span>
+                <p id="store_num" style="display:inline;">
+                </p>
+
+                <span class="join-normal">花店加入“诚信保障计划”</span>
+
+            </div>
+            <p style="color:red;font-size:.5rem;">注：未加入“诚信保障计划”的花店将不能在平台接单</p>
+            <p class="join" onclick="plan.addHonest();" id="join_status"/>
+            立即加入</p>
+        </div>
+
+    </div>
+    <div class="image-container">
+        <img src="image/plan_3.png" class="auto-image"/>
+
+        <img src="image/plan_4.png" class="auto-image"/>
+        <img src="image/plan_6.png" class="auto-image"/>
+        <img src="image/plan_7.png" class="auto-image"/>
+        <img src="image/plan_8.png" class="auto-image"/>
+        <img src="image/plan_9.png" class="auto-image"/>
+        <img src="image/plan_10.png" class="auto-image"/>
+        <img src="image/plan_11.png" class="auto-image"/>
+        <img src="image/plan_12.png" class="auto-image"/>
+        <img src="image/plan_13.png" class="auto-image" onclick="plan.addHonest();" id="add_bottom"/>
+        <img src="image/plan_14.png" class="auto-image"/>
+    </div>
+
+
+</div>
+<script>
+    var page = 0;
+
+
+    function bodyLoaded() {
+        setTimeout(function () {
+            alert('updateStoreNum');
+            updateStoreNum("333",1)
+			  updateStoreNum("333",1)
+        }, 1000);
+    }
+
+
+</script>
+</body>
+</html>

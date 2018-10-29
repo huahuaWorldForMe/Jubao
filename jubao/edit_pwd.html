@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+
+    <meta name="theme-color" content="#000000">
+    <!--
+      manifest.json provides metadata used when your web app is added to the
+      homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+    <link rel="shortcut icon" href="image/favicon.ico">
+    <script src="js/mui.min.js"></script>
+    <script src="js/vue.min.js"></script>
+    <script src="js/cm.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/tween.js@16.3.4"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <link href="css/common.css" rel="stylesheet"/>
+    <link href="css/index.css" rel="stylesheet"/>
+    <link href="css/chinamobile.css" rel="stylesheet"/>
+
+    <script type="text/javascript" charset="utf-8">
+
+        mui.init({
+            gestureConfig: {
+                tap: true, //默认为true
+            }
+
+        });
+    </script>
+
+
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>修改密码</title>
+</head>
+<body class="body" onload="bodyLoaded()">
+<noscript>
+    You need to enable JavaScript to run this app.
+</noscript>
+
+<!--
+  This HTML file is a template.
+  If you open it directly in the browser, you will see an empty page.
+
+  You can add webfonts, meta tags, or analytics to this file.
+  The build step will place the bundled scripts into the <body> tag.
+
+  To begin the development, run `npm start` or `yarn start`.
+  To create a production bundle, use `npm run build` or `yarn build`.
+-->
+
+<header class="mui-bar mui-bar-nav nav-bar">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left t-f-c-w"></a>
+    <h1 class="mui-title title">修改密码</h1>
+</header>
+<div class="mui-content  m-p-h bg-white f-v f-jc-c ">
+    <!--<div id="root"></div>-->
+    <form class="f-v m-p-h-90 bg-white border-gray m-t-20   m-b-20" id="formPost">
+        <!--<div class="f-v m-p-h-90 bg-white border-gray m-t-20   m-b-20  "  id="formPost">-->
+
+
+            <div class="f-f-h  m-p-h f-jc-c  ">
+                <img src="./image/password.png" class="l-icon m-l-10"/>
+                <input name="old_password" class="index-input  m-p-h " style="    height: 40px;padding: 10px;margin:0; border: 0;" type="text"
+                       id="old_password" v-model="old_password"
+                       @change="oldPasswordInput(old_password)"
+                       placeholder="请输入原来的密码"/>
+
+            </div>
+            <div class="divider-h m-l-10 m-r-10"></div>
+            <div class="f-f-h f-jc-c m-p-h   ">
+                <img src="./image/password.png" class="l-icon m-l-10"/>
+                <input class=" index-input m-p-h  " style="    height: 40px;padding: 10px;margin:0; border: 0;"
+                       name="new_password"
+                       id="new_password" v-model="new_password"
+                       @change="newPasswordInput(new_password)"
+                       type="text"
+                       placeholder="请输入新密码">
+            </div>
+        <div class="divider-h m-l-10 m-r-10"></div>
+        <!--</div>-->
+        <button type="button" class=" m-p-h-90 mui-btn mui-btn-danger m-t-10 m-b-10 bg-main-red" @click="submit">登录</button>
+    </form>
+</div>
+
+<script>
+    var formVue = new Vue({
+        el: '#formPost',
+        data: {
+            old_password: '',
+            new_password: '',
+
+
+        },
+        methods: {
+            oldPasswordInput:function(newMibao){
+                this.old_password=newMibao;
+            },
+            newPasswordInput:function(newMibaoQ){
+                this.user_list_mibao_answer=newMibaoQ;
+            },
+
+
+            submit: function () {
+                mui.ajax('https://www.miaokemc.com/api/cmindex/edit_pwd', {
+                    data: {
+                        old_password: this.old_password,
+                        new_password: this.new_password,
+                        uid:uid
+
+
+                    },
+                    dataType: 'json',//服务器返回json格式数据
+                    type: 'get',//HTTP请求类型
+                    timeout: 10000,//超时时间设置为10秒；
+//                    headers:{'Content-Type':'application/json'},
+                    success: function (data) {
+                        //服务器返回响应，根据响应结果，分析是否登录成功；
+                        console.log(data)
+                        if (data.status === 1) {
+
+
+                            mui.confirm("修改密码成功", "提示", ["确定"], function () {
+                                window.location.href = './login.html';
+
+                            })
+                        } else {
+                            mui.confirm(data.message, "提示", ["确定"], function () {
+                            })
+                        }
+                    },
+                    error: function (xhr, type, errorThrown) {
+                        //异常处理；
+                        console.log(type);
+                    }
+                });
+            }
+        }
+    })
+    var callback='./user.html';
+    var uid="";
+    function bodyLoaded() {
+        callback = getQueryString('callback');
+//        console.log(callback);
+        var storage;
+        if (window.localStorage) {
+            storage = window.localStorage;
+            uid = storage.getItem('uid');
+        }
+
+        if(callback===null||callback===undefined||callback==='null'){
+            callback='./user.html';
+//            console.log(callback);
+
+            return;
+        }
+//        mui.ajax('https://www.miaokemc.com/api/indexjj/today_money', {
+//            data: {},
+//            dataType: 'json',//服务器返回json格式数据
+//            type: 'get',//HTTP请求类型
+//            timeout: 10000,//超时时间设置为10秒；
+////                    headers:{'Content-Type':'application/json'},
+//            success: function (data) {
+//                //服务器返回响应，根据响应结果，分析是否登录成功；
+//                console.log(data)
+//                if (data.status === 1) {
+//                    incomeVue.updateView(data.data);
+//
+//                } else {
+//                    if (page === 0) {
+//                        mui.confirm(data.message, "提示", ["确定"], function () {
+//                            window.location.reload();
+//                        })
+//                    } else {
+//                        mui.toast(data.message);
+//                    }
+//                }
+//
+//            },
+//            error: function (xhr, type, errorThrown) {
+//                //异常处理；
+//                console.log(type);
+//            }
+//        });
+    }
+
+    document.getElementById('toRegister').addEventListener('tap', function () {
+//打开关于页面
+        mui.openWindow({
+            url: 'register.html', //目标页面地址
+            id: 'register' //触发新打开页面的id
+        });
+    });
+
+</script>
+</body>
+</html>

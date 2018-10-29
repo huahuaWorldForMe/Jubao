@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+
+    <meta name="theme-color" content="#000000">
+    <!--
+      manifest.json provides metadata used when your web app is added to the
+      homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+    <link rel="shortcut icon" href="image/favicon.ico">
+    <script src="js/mui.min.js"></script>
+    <script src="js/vue.min.js"></script>
+    <script src="js/cm.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tween.js@16.3.4"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <link href="css/common.css" rel="stylesheet"/>
+    <link href="css/index.css" rel="stylesheet"/>
+    <link href="css/user.css" rel="stylesheet"/>
+    <link href="css/chinamobile.css" rel="stylesheet"/>
+
+    <script type="text/javascript" charset="utf-8">
+
+        mui.init({
+            gestureConfig: {
+                tap: true, //默认为true
+            }
+
+        });
+        window.onload = function () {
+            var isLogin = '0';
+            var storage = null;
+            var userName = '';
+//            console.log(window.localStorage);
+            if (window.localStorage) {
+                storage = window.localStorage;
+                isLogin = storage.getItem('is_login');
+                userName = storage.getItem('user_name');
+            }
+
+            var loginEl = new Vue({
+                el: "#loginInfo",
+                data: {
+                    show: '0',
+                    user_name: ''
+                },
+                methods: {
+                    showLogin: function (show) {
+//                        alert("showLogin:"+show);
+                        this.show = show;
+                        this.user_name = userName;
+                    }
+                }
+            });
+
+            var logoutVue = new Vue({
+                el: "#logout",
+                data: {
+                    is_login: isLogin
+                },
+                methods: {
+                    showLogout: function (isLogin) {
+//                        alert("showLogout:"+isLogin);
+
+                        this.is_login = isLogin;
+                    }
+                }
+            });
+
+
+            if (is_login_success()) {
+
+                loginEl.showLogin('0');
+                logoutVue.showLogout('1');
+
+            }else{
+                loginEl.showLogin('1');
+                logoutVue.showLogout('0');
+            }
+
+
+        }
+
+    </script>
+
+
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>用户中心</title>
+</head>
+<body class="body">
+<noscript>
+    You need to enable JavaScript to run this app.
+</noscript>
+
+<!--
+  This HTML file is a template.
+  If you open it directly in the browser, you will see an empty page.
+
+  You can add webfonts, meta tags, or analytics to this file.
+  The build step will place the bundled scripts into the <body> tag.
+
+  To begin the development, run `npm start` or `yarn start`.
+  To create a production bundle, use `npm run build` or `yarn build`.
+-->
+
+<nav class="mui-bar mui-bar-tab">
+    <a class="mui-tab-item " id="toIndex">
+        <span class="mui-icon chinamobile icon-home"></span>
+        <span class="mui-tab-label">用户中心</span>
+    </a>
+    <a class="mui-tab-item " id="toSecond">
+        <span class="mui-icon chinamobile icon-icon--"></span>
+        <span class="mui-tab-label">Classification</span>
+    </a>
+    <a class="mui-tab-item mui-active" id="toUser">
+        <span class="mui-icon chinamobile icon-user"></span>
+
+        <span class="mui-tab-label">个人中心</span>
+    </a>
+</nav>
+
+<div class="mui-content background m-p-h">
+    <!--<div id="root"></div>-->
+
+    <div class="user-top f-v m-p-h f-jc-c user-info" style="background:#ff5053">
+        <img class="arc-top" src="./image/arc.png"/>
+
+        <img src="image/avatar.png" class="mine-avatar">
+        <div class="f-v" id="loginInfo">
+            <div class="f-v" onclick="login()"  v-if="show==1">
+                <p class="t-f-s-13 font-666 absolute b-5-r">登录/注册</p>
+            </div>
+            <div class="f-v" id="userName">
+                <p class="t-f-s-13 font-666 absolute b-5-r">{{user_name}}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="f-f-h m-p-h p-10 bg-white" id="toOrderList" onclick="toOrderList()">
+        <img src="./image/me_order.png" class="l-icon"/>
+
+        <span class="flex-weight1 t-f-s-13 t-f-c-3 m-l-10" >我的订单</span>
+        <img src="./image/arrow_right.png" class="l-icon"/>
+    </div>
+    <view class="divider-h"/>
+
+    <div class="f-f-h m-p-h p-10 bg-white" id="toFaq">
+        <img src="./image/me_faq.png" class="l-icon"/>
+
+        <span class="flex-weight1 t-f-s-13 t-f-c-3 m-l-10">咨询客服</span>
+        <img src="./image/arrow_right.png" class="l-icon"/>
+    </div>
+    <view class="divider-h"/>
+
+    <div class="f-f-h m-p-h p-10 bg-white" id="toEditPassword" onclick="toEditPwd()">
+        <img src="./image/feedback.png" class="l-icon"/>
+
+        <span class="flex-weight1 t-f-s-13 t-f-c-3 m-l-10" >修改密码</span>
+        <img src="./image/arrow_right.png" class="l-icon"/>
+    </div>
+    <view class="divider-h"/>
+    <!--<div class="f-f-h m-p-h p-10 bg-white" id="toWallet">-->
+    <!--<img src="./image/me_wallet.png" class="l-icon"/>-->
+
+    <!--<span class="flex-weight1 t-f-s-13 t-f-c-3 m-l-10">转款信息</span>-->
+    <!--<img src="./image/arrow_right.png" class="l-icon"/>-->
+    <!--</div>-->
+    <!--<view class="divider-h"/>-->
+
+
+</div>
+<p v-if="is_login==1" class="f-f-h fixed b-10 font t-f-c-8 " onclick="logout()" id="logout" style="bottom:60px;">退出</p>
+
+<script>
+    function logout() {
+        if (window.localStorage) {
+            var storage = window.localStorage;
+            storage.setItem('is_login','0');    //调用setItem方法，存储数据
+            storage.setItem("user_name", '');    //调用setItem方法，存储数据
+            storage.setItem("uid", '');    //调用setItem方法，存储数据
+//            storage.clear();
+//            storage.clear();
+        }
+        window.location.reload();
+    }
+    document.getElementById('toIndex').addEventListener('tap', function () {
+//打开关于页面
+        mui.openWindow({
+            url: 'index.html?openid='+getOpenid(), //目标页面地址
+            id: 'index' //触发新打开页面的id
+        });
+    });
+    document.getElementById('toSecond').addEventListener('tap', function () {
+//打开关于页面
+        mui.openWindow({
+            url: 'second.html', //目标页面地址
+            id: 'second' //触发新打开页面的id
+        });
+    });
+    document.getElementById('toUser').addEventListener('tap', function () {
+//打开关于页面
+        mui.openWindow({
+            url: 'user.html', //目标页面地址
+            id: 'user' //触发新打开页面的id
+        });
+    });
+    function login() {
+        //打开关于页面
+        mui.openWindow({
+            url: 'login.html', //目标页面地址
+            id: 'login' //触发新打开页面的id
+        });
+    }
+    function toOrderList() {
+        var isLogin = 0;
+        if (window.localStorage) {
+            var storage = window.localStorage;
+            uid = storage.getItem('uid');
+
+
+        }
+        if (!is_login_success()) {
+            window.location.href = './login.html?callback=./order_list.html';
+        } else {
+            mui.openWindow({
+                url: 'order_list.html', //目标页面地址
+                id: 'order_list' //触发新打开页面的id
+            });
+        }
+    }
+    function toEditPwd() {
+        if (window.localStorage) {
+            var storage = window.localStorage;
+            uid = storage.getItem('uid');
+        }
+        if (!is_login_success()) {
+            window.location.href = './login.html?callback=./order_list.html';
+        } else {
+            mui.openWindow({
+                url: 'edit_pwd.html', //目标页面地址
+                id: 'edit_pwd' //触发新打开页面的id
+            });
+        }
+    }
+</script>
+</body>
+</html>
